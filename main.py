@@ -1,39 +1,29 @@
 from kivymd.app import MDApp
 from kivymd.uix.screen import Screen
-from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton
-from kivymd.uix.dialog import MDDialog
-from kivy.lang import Builder
-from helpers import username_helper
+from kivymd.uix.list import MDList, OneLineListItem, TwoLineListItem, ThreeLineListItem
+from kivy.uix.scrollview import ScrollView
 
 
-
-class reportApp(MDApp):
+class listApp(MDApp):
+    
     def build(self):
         screen = Screen()
-        self.theme_cls.primary_palette = "Green"
-        # username = MDTextField(text = 'Enter Username', 
-        #                        pos_hint={'center_x': 0.5, 'center_y': 0.5},
-        #                        size_hint_x=None, width=300)
-        button = MDRectangleFlatButton(text = 'Show', pos_hint={'center_x': 0.5, 'center_y': 0.4},
-                                       on_release = self.show_data)
-        self.username = Builder.load_string(username_helper)
-        screen.add_widget(self.username)
-        screen.add_widget(button)
+        
+        scroll = ScrollView()
+        
+        list_view = MDList()
+        
+        # add MD list to scrollview
+        scroll.add_widget(list_view)
+        
+        for i in range(20):
+            items = ThreeLineListItem(text = 'Item ' + str(i), secondary_text = 'Hello World',
+                                    tertiary_text = 'Third text')
+            # add one list item to MDList
+            list_view.add_widget(items)
+        
+        # add MdList to our screen
+        screen.add_widget(scroll)
         return screen
     
-    def show_data(self,obj):
-        if self.username.text is "":
-            check_string = 'Please enter a username'
-        else:
-            check_string = self.username.text + ' does not exist'
-        close_button = MDFlatButton(text = 'Close', on_release = self.close_dialog)
-        more_button = MDFlatButton(text = 'More')
-        self.dialog = MDDialog(title='Username Check', text=check_string,
-                        size_hint=(0.7, 0),
-                        buttons = [close_button, more_button])
-        self.dialog.open()
-    
-    def close_dialog(self,obj):
-        self.dialog.dismiss()
-
-reportApp().run()
+listApp().run()
