@@ -1,6 +1,7 @@
 from kivymd.app import MDApp
 from kivymd.uix.screen import Screen
-from kivymd.uix.button import MDRectangleFlatButton
+from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton
+from kivymd.uix.dialog import MDDialog
 from kivy.lang import Builder
 from helpers import username_helper
 
@@ -21,5 +22,18 @@ class reportApp(MDApp):
         return screen
     
     def show_data(self,obj):
-        print(self.username.text)
+        if self.username.text is "":
+            check_string = 'Please enter a username'
+        else:
+            check_string = self.username.text + ' does not exist'
+        close_button = MDFlatButton(text = 'Close', on_release = self.close_dialog)
+        more_button = MDFlatButton(text = 'More')
+        self.dialog = MDDialog(title='Username Check', text=check_string,
+                        size_hint=(0.7, 0),
+                        buttons = [close_button, more_button])
+        self.dialog.open()
+    
+    def close_dialog(self,obj):
+        self.dialog.dismiss()
+
 reportApp().run()
